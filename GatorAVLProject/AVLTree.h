@@ -42,6 +42,8 @@ public:
 
 };
 
+
+
 // Tests if passed strings meets the constraints of the name.
 // Names must onlu include [a-z, A-Z, spaces]
 bool AVLTree::isNameValid(std::string name) {
@@ -171,6 +173,12 @@ void AVLTree::searchName(Node* rt, std::string name) {
 
 }
 
+
+
+
+
+//*******************************************************************************************************************************************************************************
+
 // Prints an inorder version of the tree recursively. 
 // The values are separated by commas
 void AVLTree::printInOrder(Node* node) {
@@ -199,15 +207,10 @@ void AVLTree::printInOrder(Node* node) {
 		}
 		// Visit Right
 		printInOrder(node->getRight());
-
+		// Resets static variable to zero for subsequent function calls
+		if (nodesTraversed >= numOfNodes - 1) nodesTraversed = 0;
 	}
 }
-
-
-
-//*******************************************************************************************************************************************************************************
-
-
 
 /*Prints the level count of the tree. If tree is empty,
   prints 0. */

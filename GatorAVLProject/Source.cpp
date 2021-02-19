@@ -46,11 +46,10 @@ int main() {
 	tree.insert(tree.getRoot(), n10);
 	cout << tree.getNumOfNodes() << endl;
 	tree.printInOrder(tree.getRoot());
-
-	cout << endl;
+	
 	cout << "-------------------------------------------------------------------------------------------------" << endl;
-	tree.removeInOrderN(tree.getRoot(), 19);
-	cout << tree.getNumOfNodes() << endl;
-	tree.printInOrder(tree.getRoot());
+	//tree.removeInOrderN(tree.getRoot(), 19);
+	//cout << tree.getNumOfNodes() << endl;
+
 	return 0;
 }
