@@ -2,7 +2,6 @@
 #include <string>
 
 
-// this is a comment  2w
 class Node {
 private:
 	std::string name;

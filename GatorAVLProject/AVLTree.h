@@ -36,7 +36,8 @@ public:
 	void searchName(Node*, std::string);
 	void printInOrder(Node*);
 	void removeID(Node*, std::string);
-	void removeInOrderN(Node*, int);	
+	void removeInOrderN(Node*, int);
+	void printLevelCount(Node*);
 };
 
 // Tests if passed strings meets the constraints of the name.
@@ -114,36 +115,48 @@ void AVLTree::printInOrder(Node* node) {
 }
 
 void AVLTree::printLevelCount(Node* node) {
-	int numOfLevels = 0
-		// If root of the tree is null
-		if (root = nullptr) cout << numOfLevels << endl;
-		else {
-			std::queue<Node*> nodesToTraverse;              // Holds the nodes to be traversed in level order from left to right
-			std::queue<Node*> currentNodeChildren;          // Holds the children of the current node being traversed
-			std::vector<Node*> nodesInNextLevel;            // Holds the children of the current node being traversed in the queue
-			Node* lastLevelInNode = node;                   // Points to the last node in each level of the tree
-			Node* currentNode = node;                       // Holds a pointer to the current node being traversed
-			bool currentNodeHasChildren;                    // True if current node has children
+	int numOfLevels = 0;
+	// If root of the tree is null
+	if (root == nullptr) std::cout << numOfLevels << std::endl;
+	else {
+		std::queue<Node*> nodesToTraverse;              // Holds the nodes to be traversed in level order from left to right
+		std::queue<Node*> currentNodeChildren;          // Holds the children of the current node being traversed
+		std::vector<Node*> nodesInNextLevel;            // Holds the children of the current node being traversed in the queue
+		Node* lastNodeInLevel = node;                   // Points to the last node in each level of the tree
+		Node* currentNode = node;                       // Holds a pointer to the current node being traversed
+		bool currentNodeHasChildren;                    // True if current node has children
+		int numOfNodesTraversed = 0;                    // Holds the number of nodes traversed 
 
 
-			// Pushes the root into the queue, and traverses tree in level order
-			nodesToTraverse.push(node);
-			while (!nodesToTraverse.empty()) {
-				// Gets the children of the current node being traversed
-				currentNodeChildren = getChildren(currentNode);
-				currentNodeHasChildren = (currentNodeChildren > 0);
+		// Pushes the root into the queue, and traverses tree in level order
+		nodesToTraverse.push(node);
+		numOfLevels++; 
+		while (!nodesToTraverse.empty()) {
+			// Gets the children of the current node being traversed
+			currentNodeChildren = getChildren(currentNode);
+			currentNodeHasChildren = (currentNodeChildren.size() > 0);
 
-				// If current node has children, put them in the queue to be traversed in level order
-				if (currentNodeHasChildren) {
-					// Puts each child in the queue to be traversed
-					while (!currentNodeChildren.empty()) {
-						nodesToTraverse.push(currentNodeChildren.pop());
-					}
-					// If current node is the last node in level
-					if (currentNode == lastLev)
+			// If current node has children, put them in the queue to be traversed in level order
+			if (currentNodeHasChildren) {
+				// Puts each child in the queue to be traversed
+				while (!currentNodeChildren.empty()) {
+					nodesToTraverse.push(currentNodeChildren.front());
+					currentNodeChildren.pop();
 				}
-
 			}
+			// If current node is the last node in level
+			if (currentNode == lastNodeInLevel) {
+				// Updates the pointer to the next level's last node
+				lastNodeInLevel = nodesToTraverse.back();
+				// Updates the number of levels except on the last loop
+				if (numOfNodesTraversed + 1 < numOfNodes) numOfLevels++;
+			}
+			// Removes current node from nodes to be traversed
+			nodesToTraverse.pop(); 
+			numOfNodesTraversed++;
+		}
+		cout << numOfLevels; 
+	}
 }
 
 //*******************************************************************************************************************************************************************************
