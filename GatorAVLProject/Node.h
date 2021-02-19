@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+
+// this is a comment
 class Node {
 private:
 	std::string name;
