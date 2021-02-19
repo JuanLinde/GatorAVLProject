@@ -32,12 +32,14 @@ public:
 	void setRoot(Node* n) { root = n; }
 
 	void insert(Node*, Node*);
+	void removeID(Node*, std::string);
+	void removeInOrderN(Node*, int);
 	void searchID(Node*, std::string);
 	void searchName(Node*, std::string);
 	void printInOrder(Node*);
-	void removeID(Node*, std::string);
-	void removeInOrderN(Node*, int);
 	void printLevelCount(Node*);
+
+
 };
 
 // Tests if passed strings meets the constraints of the name.
@@ -93,9 +95,17 @@ void AVLTree::insert(Node* nodeStart, Node* nodeInsert) {
 	else std::cout << "unsuccessful" << std::endl;
 }
 
+
+
+
+
+//*******************************************************************************************************************************************************************************
+
 // Prints an inorder version of the tree recursively. 
 // The values are separated by commas
 void AVLTree::printInOrder(Node* node) {
+
+	static int nodesTraversed = 0;
 
 	if (root == nullptr) {
 		std::cout << "Tree is empty" << std::endl;
@@ -107,16 +117,21 @@ void AVLTree::printInOrder(Node* node) {
 	else {
 		// Visit left
 		printInOrder(node->getLeft());
-		// Print Root
-		std::cout << node->getName() << " ";
+		// Ending hasn't been reached: print comma
+		if (nodesTraversed + 1 != numOfNodes) {
+			std::cout << node->getName() << ", ";
+			nodesTraversed++;
+
+		}
+		// End reached: do not print comma
+		else {
+			std::cout << node->getName() << std::endl;
+		}
 		// Visit Right
 		printInOrder(node->getRight());
+
 	}
 }
-
-
-
-//*******************************************************************************************************************************************************************************
 
 /*Prints the level count of the tree. If tree is empty,
   prints 0. */
