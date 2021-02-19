@@ -45,26 +45,9 @@ int main() {
 	tree.insert(tree.getRoot(), n8);
 	tree.insert(tree.getRoot(), n10);
 	tree.printInOrder(tree.getRoot());
-	cout << endl;
-	cout << tree.getNumOfNodes();
 
-	/*AVLTree tree2;
-	tree2.insert(tree2.getRoot(), root);
-	tree2.insert(tree2.getRoot(), n2);
-	tree2.insert(tree2.getRoot(), n3);
-	tree2.insert(tree2.getRoot(), n4);
-	tree2.insert(tree2.getRoot(), n5);
-	tree2.removeID(tree2.getRoot(), n5->getID());
-	tree2.removeID(tree2.getRoot(), n4->getID());
-	tree2.removeID(tree2.getRoot(), n3->getID());
-	tree2.removeID(tree2.getRoot(), n2->getID());
-	tree2.removeID(tree2.getRoot(), root->getID());*/
 	cout << endl;
 	cout << "-------------------------------------------------------------------------------------------------" << endl;
-	tree.removeInOrderN(tree.getRoot(), 4);
-	cout << "Result: " << endl;
-	tree.printInOrder(tree.getRoot());
-	cout << endl;
-	cout << tree.getNumOfNodes();
+	tree.printLevelCount(tree.getRoot());
 	return 0;
 }

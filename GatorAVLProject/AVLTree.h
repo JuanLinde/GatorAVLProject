@@ -114,6 +114,12 @@ void AVLTree::printInOrder(Node* node) {
 	}
 }
 
+
+
+//*******************************************************************************************************************************************************************************
+
+/*Prints the level count of the tree. If tree is empty,
+  prints 0. */
 void AVLTree::printLevelCount(Node* node) {
 	int numOfLevels = 0;
 	// If root of the tree is null
@@ -130,8 +136,11 @@ void AVLTree::printLevelCount(Node* node) {
 
 		// Pushes the root into the queue, and traverses tree in level order
 		nodesToTraverse.push(node);
-		numOfLevels++; 
+		numOfLevels++;
 		while (!nodesToTraverse.empty()) {
+
+			// Updates current node
+			currentNode = nodesToTraverse.front();
 			// Gets the children of the current node being traversed
 			currentNodeChildren = getChildren(currentNode);
 			currentNodeHasChildren = (currentNodeChildren.size() > 0);
@@ -152,14 +161,12 @@ void AVLTree::printLevelCount(Node* node) {
 				if (numOfNodesTraversed + 1 < numOfNodes) numOfLevels++;
 			}
 			// Removes current node from nodes to be traversed
-			nodesToTraverse.pop(); 
+			nodesToTraverse.pop();
 			numOfNodesTraversed++;
 		}
-		cout << numOfLevels; 
+		std::cout << numOfLevels;
 	}
 }
-
-//*******************************************************************************************************************************************************************************
 
 /*Removes the n node from the passed node. If successful
   prints 'successful'. If not, prints unsuccessful.*/
@@ -199,7 +206,6 @@ void AVLTree::removeInOrderN(Node* node, int n) {
   nodes to be visited in a traversal, and the second contains
   the children of a node. Returns a queue with all the nodes
   merged.*/
-
 std::queue<Node*> AVLTree::addChildrenToQ(std::queue<Node*> q1, std::queue<Node*>& q2){
 	int q2InitialSize = q2.size();
 	for (int i = 0; i < q2InitialSize; i++) {
@@ -397,14 +403,16 @@ Node* AVLTree::traverseLeft(Node* node) {
 	}
 }
 
-/*Finds the inorder sucessor of a node in the case where the node has a right subtree only*/
+/*Finds the inorder sucessor of a node in the case where the node has a right subtree only
+*/
 Node* AVLTree::findInOrderSuccessor(Node* node) {
 	Node* rightSubtree = node->getRight();
 	Node* inOrderSuccessor = traverseLeft(rightSubtree);
 	return inOrderSuccessor;
 }
 
-/*Same as removeID but does not print any message when successful or unsuccessful*/
+/*Same as removeID but does not print any message when successful or unsuccessful
+*/
 void AVLTree::removeIDNoPrint(Node* node, std::string id) {
 	// Takes care of the case where passed node is root of tree and has no children
 	if ((node == root) && (node->getRight() == nullptr) && (node->getLeft() == nullptr)) {
@@ -456,7 +464,8 @@ void AVLTree::removeIDNoPrint(Node* node, std::string id) {
 	}
 }
 
-/*Same as removeIDHelper but does not print any messages when successful or unsuccessful*/
+/*Same as removeIDHelper but does not print any messages when successful or unsuccessful
+*/
 Node* AVLTree::removeIDHelperNoPrint(Node* node, std::string id) {
 	// Base case for recursion: ID not found
 	if (node == nullptr) {
