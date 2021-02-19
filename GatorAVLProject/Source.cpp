@@ -44,13 +44,13 @@ int main() {
 	tree.insert(tree.getRoot(), n9);
 	tree.insert(tree.getRoot(), n8);
 	tree.insert(tree.getRoot(), n10);
-	//tree.printInOrder(tree.getRoot());
+	cout << tree.getNumOfNodes() << endl;
+	tree.printInOrder(tree.getRoot());
 
 	cout << endl;
 	cout << "-------------------------------------------------------------------------------------------------" << endl;
-	cout << "Levels: ";
-	tree.printLevelCount(tree.getRoot());
-	cout << endl;
+	tree.removeInOrderN(tree.getRoot(), 19);
+	cout << tree.getNumOfNodes() << endl;
 	tree.printInOrder(tree.getRoot());
 	return 0;
 }
