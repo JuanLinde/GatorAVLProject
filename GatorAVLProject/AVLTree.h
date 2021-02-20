@@ -18,6 +18,7 @@ private:
 	std::vector<std::string> searchNameHelper(Node*, std::string);
 	Node* removeIDHelper(Node*, std::string);
 	Node* findInOrderSuccessor(Node*);
+	Node* findIDnthNode(Node*, int);
 	Node* traverseLeft(Node*);
 	Node* removeIDHelperNoPrint(Node*, std::string);
 	void removeIDNoPrint(Node*, std::string);
@@ -40,7 +41,11 @@ public:
 	void printLevelCount(Node*);
 
 
+
+
 };
+
+
 
 
 
@@ -97,38 +102,6 @@ void AVLTree::insert(Node* nodeStart, Node* nodeInsert) {
 	else std::cout << "unsuccessful" << std::endl;
 }
 
-/*Removes the n node from the passed node. If successful
-  prints 'successful'. If not, prints unsuccessful.*/
-void AVLTree::removeInOrderN(Node* node, int n) {
-
-	// Counts the number of nodes traversed
-	static int nodeCounter = -1;
-
-	// Makes sure that there are enough nodes to search
-	if (n > numOfNodes - 1) {
-		std::cout << "unsuccessful" << std::endl;
-		return;
-	}
-
-	// Recursion Base case
-	if (node == nullptr) {
-		return;
-	}
-	// Traverse the tree inorder until the nth node is found
-	else {
-		//Go left
-		removeInOrderN(node->getLeft(), n);
-		// Increase Counter
-		nodeCounter++;
-		// If current node is the nth node, remove it.
-		if (n == nodeCounter) {
-			removeID(root, node->getID());
-			return;
-		}
-		// Go right
-		removeInOrderN(node->getRight(), n);
-	}
-}
 
 /*This function searches for the passed name in preorder traversal. It returns
   a vector with the found names.*/
@@ -178,6 +151,61 @@ void AVLTree::searchName(Node* rt, std::string name) {
 
 
 //*******************************************************************************************************************************************************************************
+
+
+/*
+	Inputs:
+			   root - Node* to the root of the tree
+			   n    - The nth node to be removed
+	Comments:
+
+	The traversal is performed recursively calling a helper function.
+	The removal is always started from the root.
+
+*/
+void AVLTree::removeInOrderN(Node* root, int n) {
+
+	if (n > numOfNodes - 1) std::cout << "unsuccessful" << std::endl;
+	else {
+		Node* NodeToBeRemoved = findIDnthNode(root, n);
+		std::string id = NodeToBeRemoved->getID();
+		removeID(root, id);
+	}
+}
+
+// Inputs: 
+//		         root - Pointer to the root of the tree
+//		         n    - The nth node in inorder traversal order
+// Outputs: 
+//               Node* - pointer to the nth node in inorder traversal
+//		            
+// Comments:
+//               Traverses the tree inorder and returns the id
+//			     of the nth node, which is determined by the input.
+//             
+Node* AVLTree::findIDnthNode(Node* node, int n) {
+
+	static int traversedNodes = 0;
+	static std::vector<Node*> NodesUpToIncludingNth;
+	Node* ptrToNthNode = nullptr;
+
+	if (node == nullptr) return nullptr;
+	else {
+		findIDnthNode(node->getLeft(), n);
+		// If the nth node is not in the vector or n= 0 and vector is empty, push the current
+		if (NodesUpToIncludingNth.size() <= n) NodesUpToIncludingNth.push_back(node);
+		findIDnthNode(node->getRight(), n);
+		traversedNodes++;
+		if (traversedNodes == numOfNodes) {
+			// Reset static variables for subsequent calls and return id
+			traversedNodes = 0;
+			ptrToNthNode = NodesUpToIncludingNth.back();
+			NodesUpToIncludingNth.clear();
+			return ptrToNthNode;
+		}
+
+	}
+}
 
 // Prints an inorder version of the tree recursively. 
 // The values are separated by commas
@@ -406,8 +434,6 @@ void AVLTree::searchID(Node* rt, std::string id) {
 	// If id is equal return false
 	else std::cout << rt->getName() << std::endl;
 }
-
-
 
 /*This function takes a pointer a traverses only the left path of the tree
   starting at the passed pointer until a null node is encountered. It returns
