@@ -15,7 +15,7 @@ private:
 	bool isIDUnique(Node*, std::string);
 	bool isIDValid(std::string);
 	Node* insertHelper(Node*, Node*);
-	
+	std::vector<std::string> searchNameHelper(Node*, std::string);
 	Node* removeIDHelper(Node*, std::string);
 	Node* findInOrderSuccessor(Node*);
 	Node* findIDnthNode(Node*, int);
@@ -40,31 +40,11 @@ public:
 	void printInOrder(Node*);
 	void printLevelCount(Node*);
 
-	std::vector<std::string> searchNameHelper(Node*, std::string);
+
 
 
 
 };
-
-
-/*This function calls a helper function that recursively searches the tree for
-  the 'name' parameter. If the helper function returns a non-empty vector, then
-  this function prints the ID's in the order the helper function found them.*/
-void AVLTree::searchName(Node* rt, std::string name) {
-
-
-	std::vector<std::string> foundNames = searchNameHelper(rt, name);
-	// If names were found, print the ID's in preorder traversal order
-	if (foundNames.size() > 0) {
-		for (int nameIdx = 0; nameIdx < foundNames.size(); nameIdx++) {
-			std::cout << foundNames[nameIdx] << std::endl;
-		}
-	}
-	else {
-		std::cout << "unsuccessful" << std::endl;
-	}
-
-}
 
 
 // Tests if passed strings meets the constraints of the name.
@@ -126,6 +106,24 @@ void AVLTree::insert(Node* nodeStart, Node* nodeInsert) {
 
 //*******************************************************************************************************************************************************************************
 
+/*This function calls a helper function that recursively searches the tree for
+  the 'name' parameter. If the helper function returns a non-empty vector, then
+  this function prints the ID's in the order the helper function found them.*/
+void AVLTree::searchName(Node* rt, std::string name) {
+
+
+	std::vector<std::string> foundNames = searchNameHelper(rt, name);
+	// If names were found, print the ID's in preorder traversal order
+	if (foundNames.size() > 0) {
+		for (int nameIdx = 0; nameIdx < foundNames.size(); nameIdx++) {
+			std::cout << foundNames[nameIdx] << std::endl;
+		}
+	}
+	else {
+		std::cout << "unsuccessful" << std::endl;
+	}
+
+}
 /*
 	Inputs:       node - ptr to the current node in the preorder recursion
 				  name - string with the name to be found in the tree
