@@ -15,7 +15,7 @@ int main() {
 	Node* n11 = new Node("n11", "00000900");
 	Node* n17 = new Node("n17", "00002000");
 	Node* n13 = new Node("n13", "00001500");
-	Node* n18 = new Node("n18", "00002500");
+	Node* n18 = new Node("n13", "00002500");
 	Node* n6 = new Node("n6", "00000620");
 	Node* n2 = new Node("n2", "00000275");
 	Node* n15 = new Node("n15", "00001700");
@@ -47,9 +47,9 @@ int main() {
 	cout << tree.getNumOfNodes() << endl;
 	tree.printInOrder(tree.getRoot());
 	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
-	for (int i = 0; i < 24; i++) {
-		tree.removeInOrderN(tree.getRoot(), 0);
-		tree.printInOrder(tree.getRoot());
+	for (int i = 0; i < 2; i++) {
+		tree.searchNameHelper(tree.getRoot(), "n13");
+		//tree.printInOrder(tree.getRoot());
 		cout << "-------------------------------------------------------------------------------------------------" << endl;
 	}
 	//tree.removeInOrderN(tree.getRoot(), 19);

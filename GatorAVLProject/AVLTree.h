@@ -15,7 +15,7 @@ private:
 	bool isIDUnique(Node*, std::string);
 	bool isIDValid(std::string);
 	Node* insertHelper(Node*, Node*);
-	std::vector<std::string> searchNameHelper(Node*, std::string);
+	
 	Node* removeIDHelper(Node*, std::string);
 	Node* findInOrderSuccessor(Node*);
 	Node* findIDnthNode(Node*, int);
@@ -40,13 +40,31 @@ public:
 	void printInOrder(Node*);
 	void printLevelCount(Node*);
 
+	std::vector<std::string> searchNameHelper(Node*, std::string);
 
 
 
 };
 
 
+/*This function calls a helper function that recursively searches the tree for
+  the 'name' parameter. If the helper function returns a non-empty vector, then
+  this function prints the ID's in the order the helper function found them.*/
+void AVLTree::searchName(Node* rt, std::string name) {
 
+
+	std::vector<std::string> foundNames = searchNameHelper(rt, name);
+	// If names were found, print the ID's in preorder traversal order
+	if (foundNames.size() > 0) {
+		for (int nameIdx = 0; nameIdx < foundNames.size(); nameIdx++) {
+			std::cout << foundNames[nameIdx] << std::endl;
+		}
+	}
+	else {
+		std::cout << "unsuccessful" << std::endl;
+	}
+
+}
 
 
 // Tests if passed strings meets the constraints of the name.
@@ -103,15 +121,31 @@ void AVLTree::insert(Node* nodeStart, Node* nodeInsert) {
 }
 
 
-/*This function searches for the passed name in preorder traversal. It returns
-  a vector with the found names.*/
+
+
+
+//*******************************************************************************************************************************************************************************
+
+/*
+	Inputs:       node - ptr to the current node in the preorder recursion
+				  name - string with the name to be found in the tree
+
+	output:       foundNames - vector containing the names found in the traversal in preorder
+
+	Comments:     Function searches for names in a tree. If multiple names are found,
+				  the names are returned in a vector in the order in which they were
+				  found. The function does not check if name is in the tree.
+
+*/
 std::vector<std::string> AVLTree::searchNameHelper(Node* node, std::string name) {
 
+	static int traversedNodes = 0;
 	static std::vector<std::string> foundNames;
+	std::vector<std::string> foundNamesCopy;
 
 	// Base level for recusion.
 	if (node == nullptr) {
-		return foundNames;
+		return foundNamesCopy;
 	}
 	// Traverse the tree
 	else {
@@ -122,36 +156,22 @@ std::vector<std::string> AVLTree::searchNameHelper(Node* node, std::string name)
 		searchNameHelper(node->getLeft(), name);
 		//Search Right
 		searchNameHelper(node->getRight(), name);
-		return foundNames;
-	}
-	return foundNames;
-}
-
-/*This function calls a helper function that recursively searches the tree for
-  the 'name' parameter. If the helper function returns a non-empty vector, then
-  this function prints the ID's in the order the helper function found them.*/
-void AVLTree::searchName(Node* rt, std::string name) {
-
-
-	std::vector<std::string> foundNames = searchNameHelper(rt, name);
-	// If names were found, print the ID's in preorder traversal order
-	if (foundNames.size() > 0) {
-		for (int nameIdx = 0; nameIdx < foundNames.size(); nameIdx++) {
-			std::cout << foundNames[nameIdx] << std::endl;
+		traversedNodes++;
+		if (traversedNodes == numOfNodes) {
+			// Reset static variables for subsequent calls and return a copy of vector with found names
+			traversedNodes = 0;
+			for (int nameIdx = 0; nameIdx < foundNames.size(); nameIdx++) {
+				foundNamesCopy.push_back(foundNames[nameIdx]);
+			}
+			foundNames.clear();
+			return foundNamesCopy;
+		}
+		else {
+			return foundNamesCopy;
 		}
 	}
-	else {
-		std::cout << "unsuccessful" << std::endl;
-	}
 
 }
-
-
-
-
-
-//*******************************************************************************************************************************************************************************
-
 
 /*
 	Inputs:
