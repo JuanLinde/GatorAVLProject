@@ -47,6 +47,67 @@ int getBalanceFactor(Node* node) {
 	}
 }
 
+int checkCase(Node* nodeOutOfBalance) {
+	int balanceFactorPrimaryNode = getBalanceFactor(nodeOutOfBalance);
+	int BFPrimaryNodeLeftChild = getBalanceFactor(nodeOutOfBalance->getLeft());
+	int BFPrimaryNodeRightChild = getBalanceFactor(nodeOutOfBalance->getRight());
+
+	//Checks left left case
+	if (balanceFactorPrimaryNode == 2 && BFPrimaryNodeLeftChild == 1) return 0;
+	// Checks left right case
+	else if (balanceFactorPrimaryNode == 2 && BFPrimaryNodeLeftChild == -1) return 1;
+	// Checks right right case
+	else if (balanceFactorPrimaryNode == -2 && BFPrimaryNodeRightChild == -1) return 2;
+	// Checks right left case
+	else if (balanceFactorPrimaryNode == -2 && BFPrimaryNodeRightChild == 1) return 3;
+	// For completeness
+	else return -1;
+
+}
+
+Node* rotateRight(Node* node) {
+
+	// If passed node has no children, return passed node
+	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
+		return node;
+	}
+	// If passed node has one children to the left
+	else {
+		Node* newParent = node->getLeft();
+		Node* newParentOldRight = newParent->getRight();
+		newParent->setRight(node);
+		node->setLeft(newParentOldRight);
+		return newParent;
+	}
+}
+void printInOrder(Node* node, int numOfNodes) {
+
+	static int nodesTraversed = 0;
+	//Base case for recursion
+	if (node == nullptr) {
+		return;
+	}
+	else {
+		// Visit left
+		printInOrder(node->getLeft(), numOfNodes);
+		// Ending hasn't been reached: print comma
+		if (nodesTraversed + 1 != numOfNodes) {
+			std::cout << node->getName() << ", ";
+			nodesTraversed++;
+
+		}
+		// End reached: do not print comma
+		else {
+			std::cout << node->getName() << std::endl;
+			nodesTraversed++;
+		}
+		// Visit Right
+		printInOrder(node->getRight(), numOfNodes);
+		// Resets static variable to zero for subsequent function calls
+		if (nodesTraversed >= numOfNodes) nodesTraversed = 0;
+	}
+}
+
 
 
 int main() {
@@ -74,12 +135,11 @@ int main() {
 	Node* n10 = new Node("n10", "00000850");
 	
 	n4->setLeft(n1);
-	n4->setRight(n2);
-	n2->setLeft(n5);
 	n1->setLeft(n3);
-	n5->setRight(n6);
+	printInOrder(n4, 3);
+	rotateRight(n4);
+	printInOrder(n1, 3);
 	
-	cout << getBalanceFactor(n4) << getBalanceFactor(n2) << getBalanceFactor(n1) << getBalanceFactor(n5) << getBalanceFactor(n6);
 	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
 	/*tree.insert(tree.getRoot(), n4);
 	tree.insert(tree.getRoot(), n1);

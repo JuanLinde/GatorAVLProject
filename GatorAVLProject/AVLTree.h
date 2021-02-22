@@ -17,6 +17,8 @@ private:
 	Node* insertHelper(Node*, Node*);
 	int getHeight(Node*);
 	int getBalanceFactor(Node*);
+	bool isBalancefactorValid(int);
+	int checkCase(Node*);
 	std::vector<std::string> searchNameHelper(Node*, std::string);
 	Node* removeIDHelper(Node*, std::string);
 	Node* findInOrderSuccessor(Node*);
@@ -47,12 +49,10 @@ public:
 
 
 	// Defined but untested functions by order of importance
+	Node* rotateRight(Node*);
 
 	
 };
-
-
-
 
 
 
@@ -78,16 +78,17 @@ Node* AVLTree::insertHelper(Node* nodeStart, Node* nodeInsert) {
 				nodeStart->setLeft(insertHelper(nodeStart->getLeft(), nodeInsert));
 
 				int balanceFactor = getBalanceFactor(nodeStart);
-				bool balanceFactorInvalid = checkBalanceFactor(balanceFactor);
+				
 
-				if (balanceFactorInvalid) {
-					bool isLeftLeftCase = checkLeftLeftCase(nodeStart);
-					bool isLeftRightCase = checkLeftRightCase(nodeStart);
-
-					if (isLeftLeftCase) {
+				if (isBalancefactorValid(balanceFactor)) {
+					// Checks for the type of case for rotation
+					int kse = checkCase(nodeStart);
+					// kse = 0 -> left left case -> right rotation
+					if (kse == 0) {
 						return rotateRight(nodeStart);
 					}
-					else if (isLeftRightCase) {
+					// kse = 1 -> left right case -> left right rotation
+					else if (kse == 1) {
 						return rotateLeftRight(nodeStart);
 					}
 				}
@@ -95,18 +96,21 @@ Node* AVLTree::insertHelper(Node* nodeStart, Node* nodeInsert) {
 			// If key is greater than current node's key, insert to the right recursively
 			else {
 				nodeStart->setRight(insertHelper(nodeStart->getRight(), nodeInsert));
+
 				int balanceFactor = getBalanceFactor(nodeStart);
-				bool balanceFactorInvalid = checkBalanceFactor(balanceFactor);
 
-				if (balanceFactorInvalid) {
-					bool isRightRightCase = checkLeftLeftCase(nodeStart);
-					bool isRightLeftCase = checkLeftRightCase(nodeStart);
 
-					if (isRightRightCase) {
-						return rotateLeft(nodeStart);
+				if (isBalancefactorValid(balanceFactor)) {
+					// Checks for the type of case for rotation
+					int kse = checkCase(nodeStart);
+
+					// kse = 2 -> right right case -> left rotation
+					if (kse == 2) {
+						return rotateRight(nodeStart);
 					}
-					else if (isRightLeftCase) {
-						return rotateRightLeft(nodeStart);
+					// kse = 3 -> right left case -> right left rotation
+					else if (kse == 3) {
+						return rotateLeftRight(nodeStart);
 					}
 				}
 			}
@@ -183,7 +187,64 @@ bool AVLTree::isNameValid(std::string name) {
 
 //*******************************************************************************************************************************************************************************
 
+/*
+	Inputs:	node - pointer from where to start the rotation to the right
 
+	Outputs: Node* - pointer to the new 'root' after rotation
+
+*/
+Node* AVLTree::rotateRight(Node* node) {
+
+	// If passed node has no children, return passed node
+	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
+		return node;
+	}
+	// If passed node has one children to the left
+	else {
+		Node* newParent = node->getLeft();
+		Node* newParentOldRight = newParent->getRight();
+		newParent->setRight(node);
+		node->setLeft(newParentOldRight);
+		return newParent;
+	}
+}
+
+/*
+	input:	nodeOutOfBalance - Node on which to check the case
+
+	output:	int - 0 -> left left case
+				  1 -> left right case
+				  2 -> right right case
+				  3 -> right left case
+*/
+int AVLTree::checkCase(Node* nodeOutOfBalance) {
+	int balanceFactorPrimaryNode = getBalanceFactor(nodeOutOfBalance);
+	int BFPrimaryNodeLeftChild = getBalanceFactor(nodeOutOfBalance->getLeft());
+	int BFPrimaryNodeRightChild = getBalanceFactor(nodeOutOfBalance->getRight());
+
+	//Checks left left case
+	if (balanceFactorPrimaryNode == 2 && BFPrimaryNodeLeftChild == 1) return 0;
+	// Checks left right case
+	else if (balanceFactorPrimaryNode == 2 && BFPrimaryNodeLeftChild == -1) return 1;
+	// Checks right right case
+	else if (balanceFactorPrimaryNode == -2 && BFPrimaryNodeRightChild == -1) return 2;
+	// Checks right left case
+	else if (balanceFactorPrimaryNode == -2 && BFPrimaryNodeRightChild == 1) return 3;
+	// For completeness
+	else return -1;
+
+}
+
+/*
+	inputs: balanceFactor - The balance factor of the node under consideration
+
+	outputs: bool         - If balance factor < -1 or > 1 returns false
+
+*/
+bool AVLTree::isBalancefactorValid(int bf) {
+	if (bf < -1 || bf > 1) return false;
+	else return true;
+}
 
 /*
 	Inputs: Node - Pointer to the node whose balance factor is needed
@@ -623,7 +684,6 @@ bool AVLTree::isIDValid(std::string id) {
 		return true;
 	}
 }
-
 
 /*This function receives a node and searches recursively for the
   passed id. If ID is not found, displays a message. If it is found,
