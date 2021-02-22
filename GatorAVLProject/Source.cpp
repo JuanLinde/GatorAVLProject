@@ -1,10 +1,58 @@
-#include "AVLTree.h"
+//#include "AVLTree.h"
+#include "Node.h"
+#include <iostream>
 using namespace std;
+
+int getHeight(Node* node) {
+
+	if (node == nullptr) {
+		return 0;
+	}
+	else {
+		Node* nodeToLeft = node->getLeft();
+		Node* nodeToRight = node->getRight();
+		return 1 + max(getHeight(nodeToLeft), getHeight(nodeToRight));
+	}
+}
+
+int getBalanceFactor(Node* node) {
+
+	int heightLeftSubtree = 0;
+	int heightRightSubtree = 0;
+	int balanceFactor = 0;
+
+	if (node == nullptr) return -1;
+	// Leaf nodes have balance factor of 0
+	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
+		return 0;
+
+	}
+	else if (node->getRight() == nullptr && node->getLeft() != nullptr) {
+		heightRightSubtree = 0;
+		heightLeftSubtree = getHeight(node->getLeft());
+		balanceFactor = heightLeftSubtree - heightRightSubtree;
+		return balanceFactor;
+	}
+	else if (node->getRight() != nullptr && node->getLeft() == nullptr) {
+		heightRightSubtree = getHeight(node->getRight());
+		heightLeftSubtree = 0;
+		balanceFactor = heightLeftSubtree - heightRightSubtree;
+		return balanceFactor;
+	}
+	else {
+		heightRightSubtree = getHeight(node->getRight());
+		heightLeftSubtree = getHeight(node->getLeft());
+		balanceFactor = heightLeftSubtree - heightRightSubtree;
+		return balanceFactor;
+	}
+}
+
+
 
 int main() {
 
 	string test = "Juan. Linde";
-	AVLTree tree;
+	//AVLTree tree;
 	Node* n4 = new Node("n4","00000500");
 	Node* n1 = new Node("n1", "00000250");
 	Node* n0 = new Node("n0", "00000010");
@@ -24,12 +72,20 @@ int main() {
 	Node* n9 = new Node("n9", "00000800");
 	Node* n8 = new Node("n8", "00000775");
 	Node* n10 = new Node("n10", "00000850");
-
-	tree.insert(tree.getRoot(), n4);
+	
+	n4->setLeft(n1);
+	n4->setRight(n2);
+	n2->setLeft(n5);
+	n1->setLeft(n3);
+	n5->setRight(n6);
+	
+	cout << getBalanceFactor(n4) << getBalanceFactor(n2) << getBalanceFactor(n1) << getBalanceFactor(n5) << getBalanceFactor(n6);
+	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
+	/*tree.insert(tree.getRoot(), n4);
 	tree.insert(tree.getRoot(), n1);
 	tree.insert(tree.getRoot(), n0);
 	tree.insert(tree.getRoot(), n3);
-	/*tree.insert(tree.getRoot(), n7);
+	tree.insert(tree.getRoot(), n7);
 	tree.insert(tree.getRoot(), n5);
 	tree.insert(tree.getRoot(), n12);
 	tree.insert(tree.getRoot(), n11);
@@ -44,7 +100,8 @@ int main() {
 	tree.insert(tree.getRoot(), n9);
 	tree.insert(tree.getRoot(), n8);
 	tree.insert(tree.getRoot(), n10);*/
-	cout << tree.getNumOfNodes() << endl;
+
+	/*cout << tree.getNumOfNodes() << endl;
 	tree.printInOrder(tree.getRoot());
 	tree.printInOrder(tree.getRoot());
 	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
@@ -52,6 +109,6 @@ int main() {
 	tree.printPreorder(tree.getRoot());
 	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
 	tree.printPostorder(tree.getRoot());
-	tree.printPostorder(tree.getRoot());
+	tree.printPostorder(tree.getRoot());*/
 	return 0;
 }

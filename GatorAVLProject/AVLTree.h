@@ -15,6 +15,8 @@ private:
 	bool isIDUnique(Node*, std::string);
 	bool isIDValid(std::string);
 	Node* insertHelper(Node*, Node*);
+	int getHeight(Node*);
+	int getBalanceFactor(Node*);
 	std::vector<std::string> searchNameHelper(Node*, std::string);
 	Node* removeIDHelper(Node*, std::string);
 	Node* findInOrderSuccessor(Node*);
@@ -42,8 +44,17 @@ public:
 	void printPostorder(Node*);
 	void printLevelCount(Node*);
 
-	int getBalanceFactor(Node*);
+
+
+	// Defined but untested functions by order of importance
+
+	
 };
+
+
+
+
+
 
 // Insert helper function to avoid recursion in the isIDValid part
 // Inserts nodeInsert recursively into the tree. If the function is
@@ -172,6 +183,69 @@ bool AVLTree::isNameValid(std::string name) {
 
 //*******************************************************************************************************************************************************************************
 
+
+
+/*
+	Inputs: Node - Pointer to the node whose balance factor is needed
+
+	Output: int - The balance factor of the current node
+
+	Comments:	This function calls the getHeight() function for the left
+				and right subtree and gets the balance factor of the node
+				based on those heights.
+
+*/
+int AVLTree::getBalanceFactor(Node* node) {
+
+	int heightLeftSubtree = 0;
+	int heightRightSubtree = 0;
+	int balanceFactor = 0;
+
+	if (node == nullptr) return -1;
+	// Leaf nodes have balance factor of 0
+	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
+		return 0;
+
+	}
+	else if (node->getRight() == nullptr && node->getLeft() != nullptr) {
+		heightRightSubtree = 0;
+		heightLeftSubtree = getHeight(node->getLeft());
+		balanceFactor = heightLeftSubtree - heightRightSubtree;
+		return balanceFactor;
+	}
+	else if (node->getRight() != nullptr && node->getLeft() == nullptr) {
+		heightRightSubtree = getHeight(node->getRight());
+		heightLeftSubtree = 0;
+		balanceFactor = heightLeftSubtree - heightRightSubtree;
+		return balanceFactor;
+	}
+	else {
+		heightRightSubtree = getHeight(node->getRight());
+		heightLeftSubtree = getHeight(node->getLeft());
+		balanceFactor = heightLeftSubtree - heightRightSubtree;
+		return balanceFactor;
+	}
+}
+
+/*
+	Inputs: Node - pointer from which to start calculating height
+
+	Ouput:	int  - The height of the tree from the passed node
+
+	Comments:	This function calculates the height of a tree from the
+				passed node. It does so by recursively calling itself.
+*/
+int AVLTree::getHeight(Node* node) {
+
+	if (node == nullptr) {
+		return 0;
+	}
+	else {
+		Node* nodeToLeft = node->getLeft();
+		Node* nodeToRight = node->getRight();
+		return 1 + std::max(getHeight(nodeToLeft), getHeight(nodeToRight));
+	}
+}
 
 /*
 	Inputs:	Node - Pointer to the root of the tree
