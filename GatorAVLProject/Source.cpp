@@ -28,8 +28,8 @@ int main() {
 	tree.insert(tree.getRoot(), n4);
 	tree.insert(tree.getRoot(), n1);
 	tree.insert(tree.getRoot(), n0);
-	/*tree.insert(tree.getRoot(), n3);
-	tree.insert(tree.getRoot(), n7);
+	tree.insert(tree.getRoot(), n3);
+	/*tree.insert(tree.getRoot(), n7);
 	tree.insert(tree.getRoot(), n5);
 	tree.insert(tree.getRoot(), n12);
 	tree.insert(tree.getRoot(), n11);
@@ -50,5 +50,8 @@ int main() {
 	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
 	tree.printPreorder(tree.getRoot());
 	tree.printPreorder(tree.getRoot());
+	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
+	tree.printPostorder(tree.getRoot());
+	tree.printPostorder(tree.getRoot());
 	return 0;
 }

@@ -39,13 +39,10 @@ public:
 	void searchName(Node*, std::string);
 	void printInOrder(Node*);
 	void printPreorder(Node*);
+	void printPostorder(Node*);
 	void printLevelCount(Node*);
-
-
-
-
-
 };
+
 
 
 // Tests if passed strings meets the constraints of the name.
@@ -107,6 +104,47 @@ void AVLTree::insert(Node* nodeStart, Node* nodeInsert) {
 
 //*******************************************************************************************************************************************************************************
 
+
+/*
+	Inputs:	Node - Pointer to the root of the tree
+
+	Comments:	This function does a postorder traversal from the root
+				of the tree printing the name associated with each node
+				in the process.
+*/
+void AVLTree::printPostorder(Node* node) {
+	static int nodesTraversed = 0;
+
+	if (root == nullptr) {
+		std::cout << "Tree is empty" << std::endl;
+	}
+	//Base case for recursion
+	else if (node == nullptr) {
+		return;
+	}
+	else {
+
+
+		// Visit left
+		printPostorder(node->getLeft());
+		// Ending hasn't been reached: print comma
+
+		// Visit Right
+		printPostorder(node->getRight());
+		if (nodesTraversed + 1 != numOfNodes) {
+			std::cout << node->getName() << ", ";
+			nodesTraversed++;
+
+		}
+		// End reached: do not print comma
+		else {
+			std::cout << node->getName() << std::endl;
+			nodesTraversed++;
+		}
+		// Resets static variable to zero for subsequent function calls
+		if (nodesTraversed >= numOfNodes) nodesTraversed = 0;
+	}
+}
 
 /*
 	Input:	Node - Node Pointer to the root
