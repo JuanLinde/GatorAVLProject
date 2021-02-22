@@ -41,9 +41,93 @@ public:
 	void printPreorder(Node*);
 	void printPostorder(Node*);
 	void printLevelCount(Node*);
+
+	int getBalanceFactor(Node*);
 };
 
+// Insert helper function to avoid recursion in the isIDValid part
+// Inserts nodeInsert recursively into the tree. If the function is
+// called, the insert values are valid.
+Node* AVLTree::insertHelper(Node* nodeStart, Node* nodeInsert) {
+	// If tree is empty, create root
+	if (root == nullptr) {
+		root = nodeInsert;
+	}
+	// If tree is not empty, recursively find the spot to insert node
+	else {
+		// Base case for recursion, which means the spot is found
+		if (nodeStart == nullptr) {
+			// Create node to insert
+			return nodeInsert;
+		}
+		else {
+			// If key is less than current node's key, insert to the left recursively
+			if (stoi(nodeInsert->getID()) < stoi(nodeStart->getID())) {
 
+				nodeStart->setLeft(insertHelper(nodeStart->getLeft(), nodeInsert));
+
+				int balanceFactor = getBalanceFactor(nodeStart);
+				bool balanceFactorInvalid = checkBalanceFactor(balanceFactor);
+
+				if (balanceFactorInvalid) {
+					bool isLeftLeftCase = checkLeftLeftCase(nodeStart);
+					bool isLeftRightCase = checkLeftRightCase(nodeStart);
+
+					if (isLeftLeftCase) {
+						return rotateRight(nodeStart);
+					}
+					else if (isLeftRightCase) {
+						return rotateLeftRight(nodeStart);
+					}
+				}
+			}
+			// If key is greater than current node's key, insert to the right recursively
+			else {
+				nodeStart->setRight(insertHelper(nodeStart->getRight(), nodeInsert));
+				int balanceFactor = getBalanceFactor(nodeStart);
+				bool balanceFactorInvalid = checkBalanceFactor(balanceFactor);
+
+				if (balanceFactorInvalid) {
+					bool isRightRightCase = checkLeftLeftCase(nodeStart);
+					bool isRightLeftCase = checkLeftRightCase(nodeStart);
+
+					if (isRightRightCase) {
+						return rotateLeft(nodeStart);
+					}
+					else if (isRightLeftCase) {
+						return rotateRightLeft(nodeStart);
+					}
+				}
+			}
+		}
+	}
+}
+
+/*
+	Input:		nodeStart  - node from which to insert the new node, usually the root
+				nodeInsert - pointer to node to insert into the tree
+
+	Output:		void
+
+	Comments:   The function inserts, using a helper function, a node into the tree in BST order. It also makes sure
+				that the tree remains balanced following the AVL tree conventions. The function
+				makes sure that the ID and Name in nodeInsert are valid before doing the insertion.
+				If the insertion fails, 'unsuccessful' is printed. If it succeeds, 'successful' is
+				printed.
+*/
+void AVLTree::insert(Node* nodeStart, Node* nodeInsert) {
+
+	// Ensures name and ID are valid
+	if (isNameValid(nodeInsert->getName()) && isIDValid(nodeInsert->getID())) {
+
+		insertHelper(nodeStart, nodeInsert);
+		numOfNodes++;
+		std::cout << "successful" << std::endl;
+
+	}
+	// If ID or name is not valid
+	else std::cout << "unsuccessful" << std::endl;
+}
 
 // Tests if passed strings meets the constraints of the name.
 // Names must onlu include [a-z, A-Z, spaces]
@@ -78,25 +162,9 @@ bool AVLTree::isNameValid(std::string name) {
 	return true;
 }
 
-// Inserts a name and  ID into the tree.
-// IDs and names must be valid before being inserted
-// If names and id is valid, inserts the name and id
-// Following BST order and displays successfull message.
-// If names are not valid, displays unsuccessfull message.
-// The tree gets balanced automatically if necessary.
-void AVLTree::insert(Node* nodeStart, Node* nodeInsert) {
 
-	// Ensures name and ID are valid
-	if (isNameValid(nodeInsert->getName()) && isIDValid(nodeInsert->getID())) {
 
-		insertHelper(nodeStart, nodeInsert);
-		numOfNodes++;
-		std::cout << "successful" << std::endl;
 
-	}
-	// If ID or name is not valid
-	else std::cout << "unsuccessful" << std::endl;
-}
 
 
 
@@ -482,33 +550,6 @@ bool AVLTree::isIDValid(std::string id) {
 	}
 }
 
-// Insert helper function to avoid recursion in the isIDValid part
-// Inserts nodeInsert recursively into the tree. If the function is
-// called, the insert values are valid.
-Node* AVLTree::insertHelper(Node* nodeStart, Node* nodeInsert) {
-	// If tree is empty, create root
-	if (root == nullptr) {
-		root = nodeInsert;
-	}
-	// If tree is not empty, recursively find the spot to insert node
-	else {
-		// Base case for recursion, which means the spot is found
-		if (nodeStart == nullptr) {
-			// Create node to insert
-			return nodeInsert;
-		}
-		else {
-			// If key is less than current node's key, insert to the left recursively
-			if (stoi(nodeInsert->getID()) < stoi(nodeStart->getID())) {
-				nodeStart->setLeft(insertHelper(nodeStart->getLeft(), nodeInsert));
-			}
-			// If key is greater than current node's key, insert to the right recursively
-			else {
-				nodeStart->setRight(insertHelper(nodeStart->getRight(), nodeInsert));
-			}
-		}
-	}
-}
 
 /*This function receives a node and searches recursively for the
   passed id. If ID is not found, displays a message. If it is found,
