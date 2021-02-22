@@ -38,6 +38,7 @@ public:
 	void searchID(Node*, std::string);
 	void searchName(Node*, std::string);
 	void printInOrder(Node*);
+	void printPreorder(Node*);
 	void printLevelCount(Node*);
 
 
@@ -46,7 +47,43 @@ public:
 
 };
 
+/*
+	Input:	Node - Node Pointer to the root
 
+	Comments:     This function traverses the tree in preorder displaying the name of each node
+				  in the process
+*/
+void AVLTree::printPreorder(Node* node) {
+	static int nodesTraversed = 0;
+
+	if (root == nullptr) {
+		std::cout << "Tree is empty" << std::endl;
+	}
+	//Base case for recursion
+	else if (node == nullptr) {
+		return;
+	}
+	else {
+
+		if (nodesTraversed + 1 != numOfNodes) {
+			std::cout << node->getName() << ", ";
+			nodesTraversed++;
+
+		}
+		// End reached: do not print comma
+		else {
+			std::cout << node->getName() << std::endl;
+		}
+		// Visit left
+		printPreorder(node->getLeft());
+		// Ending hasn't been reached: print comma
+
+		// Visit Right
+		printPreorder(node->getRight());
+		// Resets static variable to zero for subsequent function calls
+		if (nodesTraversed >= numOfNodes - 1) nodesTraversed = 0;
+	}
+}
 // Tests if passed strings meets the constraints of the name.
 // Names must onlu include [a-z, A-Z, spaces]
 bool AVLTree::isNameValid(std::string name) {
@@ -105,6 +142,9 @@ void AVLTree::insert(Node* nodeStart, Node* nodeInsert) {
 
 
 //*******************************************************************************************************************************************************************************
+
+
+
 
 /*This function calls a helper function that recursively searches the tree for
   the 'name' parameter. If the helper function returns a non-empty vector, then
@@ -250,11 +290,12 @@ void AVLTree::printInOrder(Node* node) {
 		// End reached: do not print comma
 		else {
 			std::cout << node->getName() << std::endl;
+			nodesTraversed++;
 		}
 		// Visit Right
 		printInOrder(node->getRight());
 		// Resets static variable to zero for subsequent function calls
-		if (nodesTraversed >= numOfNodes - 1) nodesTraversed = 0;
+		if (nodesTraversed >= numOfNodes) nodesTraversed = 0;
 	}
 }
 

@@ -46,13 +46,8 @@ int main() {
 	tree.insert(tree.getRoot(), n10);
 	cout << tree.getNumOfNodes() << endl;
 	tree.printInOrder(tree.getRoot());
+	tree.printInOrder(tree.getRoot());
 	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
-	for (int i = 0; i < 2; i++) {
-		tree.searchName(tree.getRoot(), "n1400");
-		cout << "-------------------------------------------------------------------------------------------------" << endl;
-	}
-	//tree.removeInOrderN(tree.getRoot(), 19);
-	//cout << tree.getNumOfNodes() << endl;
-
+	tree.printPreorder(tree.getRoot());
 	return 0;
 }
