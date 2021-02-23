@@ -67,8 +67,8 @@ public:
 	void printPreorder(Node*);
 	void printPostorder(Node*);
 	void printLevelCount(Node*);
+	bool isAVL(Node*);
 };
-
 
 int main() {
 	AVLTree tree;
@@ -78,12 +78,8 @@ int main() {
 	ifstream inputFile;
 	inputFile.open("input.txt");
 	getline(inputFile, numOfInputs);
-	cout << "Number of inputs: " << numOfInputs << endl; 
-	cout << "----------------------------------------------------------" << endl;
 	for (int inputIndx = 0; inputIndx < stoi(numOfInputs); inputIndx++) {
-		getline(inputFile, input);
-		cout << "Input: " << input << endl;
-		
+		getline(inputFile, input);	
 		// Look for commands with space, which means the command is not a print command
 		size_t isThereSpace = input.find(' ');
 		// Command is not a print command
@@ -94,74 +90,81 @@ int main() {
 			string command = input.substr(0, firstSpacePos);
 			// Find the arguments to the command, which happens after the first space until the end
 			string arguments = input.substr(firstSpacePos + 1);
-			cout << "Command: " << command << " Arguments: " << arguments << endl; 
-			cout << "----------------------------------------------------------" << endl;
 			if (command == "insert") {
 				// Find the position of last quotes to determine the name to insert
 				size_t posLastQuotes = arguments.find("\"", 1);
 				string name = arguments.substr(1, posLastQuotes - 1);
 				string id = arguments.substr(posLastQuotes + 2);
-				cout << "Name: " << name << " ID: " << id << endl;
-
-				cout << "Tree before insertion inorder: ";
-				tree.printInOrder(tree.getRoot());
 				Node* nodeToInsert = new Node(name, id);
-				cout << "Result Insertion: ";
 				tree.insert(tree.getRoot(), nodeToInsert);
-				cout << "Tree after insertion inorder: ";
-				tree.printInOrder(tree.getRoot());
-				cout << "----------------------------------------------------------" << endl;
 			}
 			else if (command == "search") {
 				char firstChar = arguments.at(0);
 				// If argument is a number, search number
 				if (isdigit(firstChar)) {
 					string idToSearch = arguments;
-					cout << "Search result: " << endl;
 					tree.searchID(tree.getRoot(), idToSearch);
-					cout << "----------------------------------------------------------" << endl;
 				}
 				else {
 					string nameToSearch = arguments.substr(1, arguments.length() - 2);
-					cout << "Search result: " << endl;
 					tree.searchName(tree.getRoot(), nameToSearch);
-					cout << "----------------------------------------------------------" << endl;
 				}
 			}
-			
+			else if (command == "remove") {
+				string idToRemove = arguments;
+				tree.removeID(tree.getRoot(), idToRemove);
+			}
+			// Nth order removal
+			else {
+				string nodeToRemove = arguments;
+				tree.removeInOrderN(tree.getRoot(), stoi(nodeToRemove));
+			}
 		}
 		// Command has no spaces: it is a print command
 		else {
 			string printCommand = input.substr(5);
-			cout << "print command: " << printCommand << endl;
-			cout << "----------------------------------------------------------" << endl;
 			if (printCommand == "Inorder") {
-				cout << "Print Result: " << endl;
 				tree.printInOrder(tree.getRoot());
-				cout << endl << "----------------------------------------------------------" << endl;
 			}
 			else if (printCommand == "Preorder") {
-				cout << "Print Result: " << endl;
 				tree.printPreorder(tree.getRoot());
-				cout << endl << "----------------------------------------------------------" << endl;
 			}
 			else if (printCommand == "Postorder") {
-				cout << "Print Result: " << endl;
 				tree.printPostorder(tree.getRoot());
-				cout << endl << "----------------------------------------------------------" << endl;
 			}
 			else {
-				cout << "Print Result: " << endl;
 				tree.printLevelCount(tree.getRoot());
-				cout << endl << "----------------------------------------------------------" << endl;
 			}
 		}
-
 	}
 	inputFile.close();
 	return 0;
 }
 
+/*
+	Inputs: node - Pointer to the root of the tree
+
+	Output: bool - True if the tree is balanced. False if it is not balanced.
+
+	Comments: The function recursively finds the height of the left and right subtree of every node
+			  and checks if the left and right subtree of every node is balanced from top to bottom.
+
+*/
+bool AVLTree::isAVL(Node* node) {
+	int leftsub;
+	int rightsub;
+
+	if (root == nullptr)
+		return true;
+
+	leftsub = getHeight(root->getLeft());
+	rightsub = getHeight(root->getRight());
+
+	if (abs(leftsub - rightsub) <= 1 && isAVL(root->getLeft()) && isAVL(root->getRight()))
+		return true;
+
+	return 0;
+}
 
 /*This function removes the node containing the passed ID from the tree.
   If deletion is successful, prints 'successful'. If it isn't, prints
@@ -821,7 +824,7 @@ void AVLTree::printLevelCount(Node* node) {
 			nodesToTraverse.pop();
 			numOfNodesTraversed++;
 		}
-		std::cout << numOfLevels;
+		std::cout << numOfLevels << endl;
 	}
 }
 
