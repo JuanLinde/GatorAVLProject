@@ -29,6 +29,7 @@ private:
 	std::queue<Node*> getChildren(Node*);
 	Node* rotateRight(Node*);
 	Node* rotateLeft(Node*);
+	Node* rotateLeftRight(Node*);
 	std::queue<Node*> addChildrenToQ(std::queue<Node*>, std::queue<Node*>&);
 
 public:
@@ -37,7 +38,7 @@ public:
 	Node* getRoot() { return root; }
 	int getNumOfNodes() { return numOfNodes; }
 	void setRoot(Node* n) { root = n; }
-
+	Node* rotateRightLeft(Node*);
 	void insert(Node*, Node*);
 	void removeID(Node*, std::string);
 	void removeInOrderN(Node*, int);
@@ -51,8 +52,8 @@ public:
 
 
 	// Defined but untested functions by order of importance
+
 	
-	Node* rotateLeftRight(Node*);
 	
 
 	
@@ -61,22 +62,7 @@ public:
 
 
 
-/*
-	Inputs:	node - Pointer from the node where the rotation starts
 
-	Output: node* - Pointer to the new 'root' of the rotated subtree
-	
-*/
-Node* AVLTree::rotateLeftRight(Node* node){
-	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
-		return node;
-	}
-	else {
-		node->setLeft(rotateLeft(node->getLeft()));
-		Node* newParent = rotateRight(node);
-		return newParent;
-	}
-}
 
 // Insert helper function to avoid recursion in the isIDValid part
 // Inserts nodeInsert recursively into the tree. If the function is
@@ -208,6 +194,40 @@ bool AVLTree::isNameValid(std::string name) {
 
 
 //*******************************************************************************************************************************************************************************
+
+/*
+	Inputs:	node - pointer from which the rotation starts
+
+	Output: node* - pointer to the new 'root' of rotated subtree
+
+*/
+Node* AVLTree::rotateRightLeft(Node* node) {
+	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
+		return node;
+	}
+	else {
+		node->setRight(rotateRight(node->getRight()));
+		Node* newParent = rotateLeft(node);
+		return newParent;
+	}
+}
+
+/*
+	Inputs:	node - Pointer from the node where the rotation starts
+
+	Output: node* - Pointer to the new 'root' of the rotated subtree
+
+*/
+Node* AVLTree::rotateLeftRight(Node* node) {
+	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
+		return node;
+	}
+	else {
+		node->setLeft(rotateLeft(node->getLeft()));
+		Node* newParent = rotateRight(node);
+		return newParent;
+	}
+}
 
 /*
 	Inputs:	node - Node from which the rotation starts

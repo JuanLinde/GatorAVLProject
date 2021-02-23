@@ -126,7 +126,16 @@ Node* rotateLeftRight(Node* node) {
 		return newParent;
 	}
 }
-
+Node* rotateRightLeft(Node* node) {
+	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
+		return node;
+	}
+	else {
+		node->setRight(rotateRight(node->getRight()));
+		Node* newParent = rotateLeft(node);
+		return newParent;
+	}
+}
 
 
 int main() {
@@ -153,10 +162,10 @@ int main() {
 	Node* n8 = new Node("n8", "00000775");
 	Node* n10 = new Node("n10", "00000850");
 	
-	n4->setLeft(n1);
-	n1->setRight(n3);
+	n4->setRight(n1);
+	n1->setLeft(n3);
 	printInOrder(n4, 3);
-	rotateLeftRight(n4);
+	rotateRightLeft(n4);
 	printInOrder(n3, 3);
 	
 	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
