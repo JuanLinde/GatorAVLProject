@@ -116,6 +116,16 @@ Node* rotateLeft(Node* node) {
 		return newParent;
 	}
 }
+Node* rotateLeftRight(Node* node) {
+	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
+		return node;
+	}
+	else {
+		node->setLeft(rotateLeft(node->getLeft()));
+		Node* newParent = rotateRight(node);
+		return newParent;
+	}
+}
 
 
 
@@ -143,11 +153,11 @@ int main() {
 	Node* n8 = new Node("n8", "00000775");
 	Node* n10 = new Node("n10", "00000850");
 	
-	n4->setRight(n1);
+	n4->setLeft(n1);
 	n1->setRight(n3);
 	printInOrder(n4, 3);
-	rotateLeft(n4);
-	printInOrder(n1, 3);
+	rotateLeftRight(n4);
+	printInOrder(n3, 3);
 	
 	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
 	/*tree.insert(tree.getRoot(), n4);
