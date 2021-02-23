@@ -78,10 +78,12 @@ int main() {
 	ifstream inputFile;
 	inputFile.open("input.txt");
 	getline(inputFile, numOfInputs);
+	cout << "Number of inputs: " << numOfInputs << endl; 
 
 	for (int inputIndx = 0; inputIndx < stoi(numOfInputs); inputIndx++) {
 		getline(inputFile, input);
 		cout << "Input: " << input << endl;
+		
 		// Look for commands with space, which means the command is not a print command
 		size_t isThereSpace = input.find(' ');
 		// Command is not a print command
@@ -93,6 +95,7 @@ int main() {
 			// Find the arguments to the command, which happens after the first space until the end
 			string arguments = input.substr(firstSpacePos + 1);
 			cout << "Command: " << command << " Arguments: " << arguments << endl; 
+			cout << "----------------------------------------------------------" << endl;
 			if (command == "insert") {
 				// Find the position of last quotes to determine the name to insert
 				size_t posLastQuotes = arguments.find("\"", 1);
@@ -109,9 +112,28 @@ int main() {
 				tree.printInOrder(tree.getRoot());
 				cout << "----------------------------------------------------------" << endl;
 			}
+			else if (command == "search") {
+				char firstChar = arguments.at(0);
+				// If argument is a number, search number
+				if (isdigit(firstChar)) {
+					string idToSearch = arguments;
+					cout << "Search result: " << endl;
+					tree.searchID(tree.getRoot(), idToSearch);
+					cout << "----------------------------------------------------------" << endl;
+				}
+				else {
+					string nameToSearch = arguments.substr(1, arguments.length() - 2);
+					cout << "Search result: " << endl;
+					tree.searchName(tree.getRoot(), nameToSearch);
+					cout << "----------------------------------------------------------" << endl;
+				}
+			}
+			
 		}
+		// Command has no spaces: it is a print command
 		else {
-			cout << "Space not found." << endl;
+			string printCommand = input.substr(4);
+			cout << printCommand << endl;
 		}
 
 	}
