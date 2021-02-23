@@ -79,7 +79,7 @@ int main() {
 	inputFile.open("input.txt");
 	getline(inputFile, numOfInputs);
 	cout << "Number of inputs: " << numOfInputs << endl; 
-
+	cout << "----------------------------------------------------------" << endl;
 	for (int inputIndx = 0; inputIndx < stoi(numOfInputs); inputIndx++) {
 		getline(inputFile, input);
 		cout << "Input: " << input << endl;
@@ -132,8 +132,29 @@ int main() {
 		}
 		// Command has no spaces: it is a print command
 		else {
-			string printCommand = input.substr(4);
-			cout << printCommand << endl;
+			string printCommand = input.substr(5);
+			cout << "print command: " << printCommand << endl;
+			cout << "----------------------------------------------------------" << endl;
+			if (printCommand == "Inorder") {
+				cout << "Print Result: " << endl;
+				tree.printInOrder(tree.getRoot());
+				cout << endl << "----------------------------------------------------------" << endl;
+			}
+			else if (printCommand == "Preorder") {
+				cout << "Print Result: " << endl;
+				tree.printPreorder(tree.getRoot());
+				cout << endl << "----------------------------------------------------------" << endl;
+			}
+			else if (printCommand == "Postorder") {
+				cout << "Print Result: " << endl;
+				tree.printPostorder(tree.getRoot());
+				cout << endl << "----------------------------------------------------------" << endl;
+			}
+			else {
+				cout << "Print Result: " << endl;
+				tree.printLevelCount(tree.getRoot());
+				cout << endl << "----------------------------------------------------------" << endl;
+			}
 		}
 
 	}
