@@ -14,7 +14,6 @@ int getHeight(Node* node) {
 		return 1 + max(getHeight(nodeToLeft), getHeight(nodeToRight));
 	}
 }
-
 int getBalanceFactor(Node* node) {
 
 	int heightLeftSubtree = 0;
@@ -46,7 +45,6 @@ int getBalanceFactor(Node* node) {
 		return balanceFactor;
 	}
 }
-
 int checkCase(Node* nodeOutOfBalance) {
 	int balanceFactorPrimaryNode = getBalanceFactor(nodeOutOfBalance);
 	int BFPrimaryNodeLeftChild = getBalanceFactor(nodeOutOfBalance->getLeft());
@@ -64,7 +62,6 @@ int checkCase(Node* nodeOutOfBalance) {
 	else return -1;
 
 }
-
 Node* rotateRight(Node* node) {
 
 	// If passed node has no children, return passed node
@@ -107,6 +104,18 @@ void printInOrder(Node* node, int numOfNodes) {
 		if (nodesTraversed >= numOfNodes) nodesTraversed = 0;
 	}
 }
+Node* rotateLeft(Node* node) {
+	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
+		return node;
+	}
+	else {
+		Node* newParent = node->getRight();
+		Node* newParentOldLeft = newParent->getLeft();
+		newParent->setLeft(node);
+		node->setRight(newParentOldLeft);
+		return newParent;
+	}
+}
 
 
 
@@ -134,10 +143,10 @@ int main() {
 	Node* n8 = new Node("n8", "00000775");
 	Node* n10 = new Node("n10", "00000850");
 	
-	n4->setLeft(n1);
-	n1->setLeft(n3);
+	n4->setRight(n1);
+	n1->setRight(n3);
 	printInOrder(n4, 3);
-	rotateRight(n4);
+	rotateLeft(n4);
 	printInOrder(n1, 3);
 	
 	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;

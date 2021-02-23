@@ -27,6 +27,8 @@ private:
 	Node* removeIDHelperNoPrint(Node*, std::string);
 	void removeIDNoPrint(Node*, std::string);
 	std::queue<Node*> getChildren(Node*);
+	Node* rotateRight(Node*);
+	Node* rotateLeft(Node*);
 	std::queue<Node*> addChildrenToQ(std::queue<Node*>, std::queue<Node*>&);
 
 public:
@@ -49,12 +51,32 @@ public:
 
 
 	// Defined but untested functions by order of importance
-	Node* rotateRight(Node*);
+	
+	Node* rotateLeftRight(Node*);
+	
 
 	
 };
 
 
+
+
+/*
+	Inputs:	node - Pointer from the node where the rotation starts
+
+	Output: node* - Pointer to the new 'root' of the rotated subtree
+	
+*/
+Node* AVLTree::rotateLeftRight(Node* node){
+	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
+		return node;
+	}
+	else {
+		node->setLeft(rotateLeft(node->getLeft()));
+		Node* newParent = rotateRight(node);
+		return newParent;
+	}
+}
 
 // Insert helper function to avoid recursion in the isIDValid part
 // Inserts nodeInsert recursively into the tree. If the function is
@@ -186,6 +208,25 @@ bool AVLTree::isNameValid(std::string name) {
 
 
 //*******************************************************************************************************************************************************************************
+
+/*
+	Inputs:	node - Node from which the rotation starts
+
+	Output: node* - Node pointer to the new 'root' of the rotated subtree
+
+*/
+Node* AVLTree::rotateLeft(Node* node) {
+	if (node->getLeft() == nullptr && node->getRight() == nullptr) {
+		return node;
+	}
+	else {
+		Node* newParent = node->getRight();
+		Node* newParentOldLeft = newParent->getLeft();
+		newParent->setLeft(node);
+		node->setRight(newParentOldLeft);
+		return newParent;
+	}
+}
 
 /*
 	Inputs:	node - pointer from where to start the rotation to the right
