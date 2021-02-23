@@ -30,6 +30,7 @@ private:
 	Node* rotateRight(Node*);
 	Node* rotateLeft(Node*);
 	Node* rotateLeftRight(Node*);
+	Node* rotateRightLeft(Node*);
 	std::queue<Node*> addChildrenToQ(std::queue<Node*>, std::queue<Node*>&);
 
 public:
@@ -38,7 +39,6 @@ public:
 	Node* getRoot() { return root; }
 	int getNumOfNodes() { return numOfNodes; }
 	void setRoot(Node* n) { root = n; }
-	Node* rotateRightLeft(Node*);
 	void insert(Node*, Node*);
 	void removeID(Node*, std::string);
 	void removeInOrderN(Node*, int);
@@ -47,22 +47,8 @@ public:
 	void printInOrder(Node*);
 	void printPreorder(Node*);
 	void printPostorder(Node*);
-	void printLevelCount(Node*);
-
-
-
-	// Defined but untested functions by order of importance
-
-	
-	
-
-	
+	void printLevelCount(Node*);	
 };
-
-
-
-
-
 
 // Insert helper function to avoid recursion in the isIDValid part
 // Inserts nodeInsert recursively into the tree. If the function is
@@ -86,19 +72,28 @@ Node* AVLTree::insertHelper(Node* nodeStart, Node* nodeInsert) {
 				nodeStart->setLeft(insertHelper(nodeStart->getLeft(), nodeInsert));
 
 				int balanceFactor = getBalanceFactor(nodeStart);
-				
 
-				if (isBalancefactorValid(balanceFactor)) {
+
+				if (!isBalancefactorValid(balanceFactor)) {
 					// Checks for the type of case for rotation
 					int kse = checkCase(nodeStart);
 					// kse = 0 -> left left case -> right rotation
 					if (kse == 0) {
-						return rotateRight(nodeStart);
+						if (nodeStart == root) {
+							root = rotateRight(nodeStart);
+						}
+						else return rotateRight(nodeStart);
 					}
 					// kse = 1 -> left right case -> left right rotation
 					else if (kse == 1) {
-						return rotateLeftRight(nodeStart);
+						if (nodeStart == root) {
+							root = rotateLeftRight(nodeStart);
+						}
+						else return rotateLeftRight(nodeStart);
 					}
+				}
+				else {
+					return nodeStart;
 				}
 			}
 			// If key is greater than current node's key, insert to the right recursively
@@ -108,18 +103,27 @@ Node* AVLTree::insertHelper(Node* nodeStart, Node* nodeInsert) {
 				int balanceFactor = getBalanceFactor(nodeStart);
 
 
-				if (isBalancefactorValid(balanceFactor)) {
+				if (!isBalancefactorValid(balanceFactor)) {
 					// Checks for the type of case for rotation
 					int kse = checkCase(nodeStart);
 
 					// kse = 2 -> right right case -> left rotation
 					if (kse == 2) {
-						return rotateRight(nodeStart);
+						if (nodeStart == root) {
+							root = rotateLeft(nodeStart);
+						}
+						else return rotateLeft(nodeStart);
 					}
 					// kse = 3 -> right left case -> right left rotation
 					else if (kse == 3) {
-						return rotateLeftRight(nodeStart);
+						if (nodeStart == root) {
+							root = rotateRightLeft(nodeStart);
+						}
+						else return rotateRightLeft(nodeStart);
 					}
+				}
+				else {
+					return nodeStart;
 				}
 			}
 		}
@@ -162,9 +166,7 @@ bool AVLTree::isNameValid(std::string name) {
 		if (!isalpha(currChar)) {
 			// If it is a digit, returns false
 			if (isdigit(currChar)) {
-				return true;/*<-----------******************************************************************************************Dont forget to change to false this was just for testing purposes**************************
-											   ******************************************************************************************************************************************************************************************
-											   *99999999999999999999999999999999999999999999999999999999999999999999999999999999******************************************************************************************************/
+				return false;
 			}
 			// If it is not a digit, makes sure that it is a space. Otherwise, returns false
 			else {
@@ -184,16 +186,6 @@ bool AVLTree::isNameValid(std::string name) {
 	// If iteration finishes, then name is valid
 	return true;
 }
-
-
-
-
-
-
-
-
-
-//*******************************************************************************************************************************************************************************
 
 /*
 	Inputs:	node - pointer from which the rotation starts

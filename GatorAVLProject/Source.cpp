@@ -1,4 +1,4 @@
-//#include "AVLTree.h"
+#include "AVLTree.h"
 #include "Node.h"
 #include <iostream>
 using namespace std;
@@ -141,13 +141,13 @@ Node* rotateRightLeft(Node* node) {
 int main() {
 
 	string test = "Juan. Linde";
-	//AVLTree tree;
-	Node* n4 = new Node("n4","00000500");
+	AVLTree tree;
+	Node* n4 = new Node("n4", "00000500");
 	Node* n1 = new Node("n1", "00000250");
-	Node* n0 = new Node("n0", "00000010");
-	Node* n3 = new Node("n3", "00000300");
-	Node* n7 = new Node("n7","00000750");
-	Node* n5 = new Node("n5","00000600");
+	Node* n0 = new Node("n0", "00000270");
+	Node* n3 = new Node("n3", "00000100");
+	Node* n7 = new Node("n7", "00000010");
+	Node* n5 = new Node("n5", "00000245");
 	Node* n12 = new Node("n12", "00001000");
 	Node* n11 = new Node("n11", "00000900");
 	Node* n17 = new Node("n17", "00002000");
@@ -162,17 +162,26 @@ int main() {
 	Node* n8 = new Node("n8", "00000775");
 	Node* n10 = new Node("n10", "00000850");
 	
-	n4->setRight(n1);
-	n1->setLeft(n3);
-	printInOrder(n4, 3);
-	rotateRightLeft(n4);
-	printInOrder(n3, 3);
 	
-	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
-	/*tree.insert(tree.getRoot(), n4);
+	tree.insert(tree.getRoot(), n4);
 	tree.insert(tree.getRoot(), n1);
 	tree.insert(tree.getRoot(), n0);
+
+	cout << tree.getRoot()->getName() << endl;
+	tree.printInOrder(tree.getRoot());
+
 	tree.insert(tree.getRoot(), n3);
+	tree.insert(tree.getRoot(), n7);
+
+	cout << tree.getRoot()->getName() << endl;
+	tree.printInOrder(tree.getRoot());
+
+	tree.insert(tree.getRoot(), n5);
+
+	cout << tree.getRoot()->getName() << endl;
+	tree.printInOrder(tree.getRoot());
+	cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
+	/*tree.insert(tree.getRoot(), n3);
 	tree.insert(tree.getRoot(), n7);
 	tree.insert(tree.getRoot(), n5);
 	tree.insert(tree.getRoot(), n12);
