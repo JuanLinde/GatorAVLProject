@@ -2,7 +2,6 @@
 #include<iostream>
 #include<vector>
 #include<queue>
-#include<fstream>
 using namespace std;
 class Node {
 private:
@@ -67,7 +66,6 @@ public:
 	void printPreorder(Node*);
 	void printPostorder(Node*);
 	void printLevelCount(Node*);
-	bool isAVL(Node*);
 };
 
 int main() {
@@ -75,11 +73,9 @@ int main() {
 
 	string numOfInputs;
 	string input;
-	ifstream inputFile;
-	inputFile.open("input.txt");
-	getline(inputFile, numOfInputs);
+	getline(cin, numOfInputs);
 	for (int inputIndx = 0; inputIndx < stoi(numOfInputs); inputIndx++) {
-		getline(inputFile, input);	
+		getline(cin, input);	
 		// Look for commands with space, which means the command is not a print command
 		size_t isThereSpace = input.find(' ');
 		// Command is not a print command
@@ -137,32 +133,6 @@ int main() {
 			}
 		}
 	}
-	inputFile.close();
-	return 0;
-}
-
-/*
-	Inputs: node - Pointer to the root of the tree
-
-	Output: bool - True if the tree is balanced. False if it is not balanced.
-
-	Comments: The function recursively finds the height of the left and right subtree of every node
-			  and checks if the left and right subtree of every node is balanced from top to bottom.
-
-*/
-bool AVLTree::isAVL(Node* node) {
-	int leftsub;
-	int rightsub;
-
-	if (root == nullptr)
-		return true;
-
-	leftsub = getHeight(root->getLeft());
-	rightsub = getHeight(root->getRight());
-
-	if (abs(leftsub - rightsub) <= 1 && isAVL(root->getLeft()) && isAVL(root->getRight()))
-		return true;
-
 	return 0;
 }
 

@@ -1,5 +1,5 @@
 9
-insert "Caroline" 50005000
+insert "Caroline" 500050000
 insert "Cory" 35354334
 insert "Cecilia" 76543210
 insert "Carla" 56567342
